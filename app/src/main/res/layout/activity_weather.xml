@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context="com.example.activity.WeatherActivity">
 
     <EditText
         android:id="@+id/etAdcode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:hint="输入行政区编号"
+        android:background="@null"
+        android:hint="输入行政区编码"
         android:inputType="number" />
 
     <Button
