@@ -2,14 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    def appVersion = rootProject.ext.appVersion
+    compileSdkVersion appVersion.compileSdkVersion
+    buildToolsVersion appVersion.buildToolsVersion
     defaultConfig {
         applicationId "com.example.myapplication"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion appVersion.minSdkVersion
+        targetSdkVersion appVersion.targetSdkVersion
+        versionCode appVersion.versionCode
+        versionName appVersion.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dataBinding {
@@ -24,13 +25,20 @@ android {
 }
 
 dependencies {
+    def androidxDependencies = rootProject.ext.androidxDependencies
+    def thridDependencies = rootProject.ext.thridDependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation androidxDependencies.Appcompat
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+    implementation androidxDependencies.Constraintlayout
     testImplementation 'junit:junit:4.13-rc-2'
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.core:core-ktx:+'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation thridDependencies.Gson
+    implementation thridDependencies.Retrofit
+    implementation thridDependencies.RetrofitConverterGson
+    implementation thridDependencies.RetrofitRxJava
+    implementation thridDependencies.Qmui
+    implementation thridDependencies.Qmuiteam
 }

@@ -27,3 +27,31 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+
+    retrofitVersion = "2.6.0"
+    appVersion = [
+            minSdkVersion    : 19,
+            targetSdkVersion : 29,
+
+            compileSdkVersion: 29,
+            buildToolsVersion: "29.0.1",
+
+            versionCode      : 1,
+            versionName      : "1.0",
+    ]
+
+    androidxDependencies = [
+            Appcompat       : 'androidx.appcompat:appcompat:1.1.0',
+            Constraintlayout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta3',
+    ]
+    thridDependencies = [
+            Gson                 : "com.google.code.gson:gson:2.8.6",
+            Qmui                 : "com.qmuiteam:qmui:2.0.0-alpha02",
+            Qmuiteam             : "com.qmuiteam:arch:2.0.0-alpha02",
+            Retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            RetrofitConverterGson: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            RetrofitRxJava       : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+    ]
+}
