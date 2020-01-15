@@ -43,10 +43,11 @@ ext {
     ]
 
     androidxDependencies = [
-            Appcompat       : 'androidx.appcompat:appcompat:1.1.0',
-            Constraintlayout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta3',
+            Appcompat       : "androidx.appcompat:appcompat:1.1.0",
+            Constraintlayout: "androidx.constraintlayout:constraintlayout:2.0.0-beta3",
+            ViewPager2      : "androidx.viewpager2:viewpager2:1.0.0"
     ]
-    thridDependencies = [
+    thirdDependencies = [
             Gson                 : "com.google.code.gson:gson:2.8.6",
             Qmui                 : "com.qmuiteam:qmui:2.0.0-alpha02",
             Qmuiteam             : "com.qmuiteam:arch:2.0.0-alpha02",

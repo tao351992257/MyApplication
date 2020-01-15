@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
+    signingConfigs {
+        release {
+            storeFile file('E:/Android Demo/MyApplication/keystore/appKeystore.jks')
+            storePassword 'lijintao'
+            keyAlias = 'Application'
+            keyPassword 'lijintao'
+        }
+    }
     def appVersion = rootProject.ext.appVersion
     compileSdkVersion appVersion.compileSdkVersion
     buildToolsVersion appVersion.buildToolsVersion
@@ -22,23 +30,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    /**命名打包后apk名字**/
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def buildType = output.name
+            outputFileName = "Application_v${defaultConfig.versionName}_${buildType}_${buildTime()}.apk"
+        }
+    }
 }
 
 dependencies {
     def androidxDependencies = rootProject.ext.androidxDependencies
-    def thridDependencies = rootProject.ext.thridDependencies
+    def thirdPartyDependencies = rootProject.ext.thirdDependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation androidxDependencies.Appcompat
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation androidxDependencies.Constraintlayout
+    implementation androidxDependencies.ViewPager2
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.13-rc-2'
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.core:core-ktx:+'
-    implementation thridDependencies.Gson
-    implementation thridDependencies.Retrofit
-    implementation thridDependencies.RetrofitConverterGson
-    implementation thridDependencies.RetrofitRxJava
-    implementation thridDependencies.Qmui
-    implementation thridDependencies.Qmuiteam
+    implementation thirdPartyDependencies.Gson
+    implementation thirdPartyDependencies.Retrofit
+    implementation thirdPartyDependencies.RetrofitConverterGson
+    implementation thirdPartyDependencies.RetrofitRxJava
+    implementation thirdPartyDependencies.Qmui
+    implementation thirdPartyDependencies.Qmuiteam
+}
+
+def buildTime() {
+    return new Date().format("yyyy-MM-dd-hh-mm")
 }

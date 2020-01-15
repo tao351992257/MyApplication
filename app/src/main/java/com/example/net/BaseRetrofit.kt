@@ -2,9 +2,13 @@ package com.example.net
 
 import android.content.Context
 import android.util.Log
+import com.example.globle.AppConst
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
@@ -13,6 +17,15 @@ import java.util.concurrent.TimeUnit
  *  Create Time : 2020/1/9
  */
 open class BaseRetrofit constructor(context: Context) {
+
+
+    val apiServiceGson: ApiService by lazy {
+        Retrofit.Builder().baseUrl(AppConst.URL).client(mOkHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build()
+                .create(ApiService::class.java)
+    }
 
     private val mOkHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
