@@ -6,10 +6,10 @@ android {
         pickFirst 'META-INF/*'
     }
     signingConfigs {
-        release {
+        MyApplication {
             storeFile file('E:/Android Demo/MyApplication/keystore/appKeystore.jks')
             storePassword 'lijintao'
-            keyAlias = 'Application'
+            keyAlias = 'MyApplication'
             keyPassword 'lijintao'
         }
     }
@@ -73,6 +73,8 @@ dependencies {
     implementation thirdPartyDependencies.Qmuiteam
     implementation thirdPartyDependencies.rxJava
     implementation thirdPartyDependencies.rxAndroid
+//    implementation thirdPartyDependencies.rxPermissions
+    implementation files('libs/AMapSearch_7.1.0_AMapLocation_4.8.0_20191210.jar')
 }
 
 

@@ -6,7 +6,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
@@ -20,7 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -33,6 +32,7 @@ ext {
     retrofitVersion = "2.6.0"
     rxJavaVersion = '2.0.2'
     rxAndroidVersion = '2.0.1'
+    rxPermissions = "0.10.2"
     retrofitRxJavaVersion = "1.0.0"
     appVersion = [
             minSdkVersion    : 19,
@@ -58,6 +58,7 @@ ext {
             RetrofitConverterGson: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             RetrofitRxJava       : "com.squareup.retrofit2:adapter-rxjava2:2.4.0",
             rxJava               : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
-            rxAndroid            : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+            rxAndroid            : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+            rxPermissions        : "com.github.tbruyelle:rxpermissions:${rxPermissions}"
     ]
 }

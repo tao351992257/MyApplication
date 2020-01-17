@@ -32,7 +32,7 @@ abstract class AppObserver<T>(private var view: BaseView?) : DisposableObserver<
     }
 
     override fun onError(e: Throwable?) {
-        val appError = AppErrorUtil.handler(e)
+        val appError: AppError = AppErrorUtil.handler(e)
         onFail(appError)
     }
 
