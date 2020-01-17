@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
+    packagingOptions {
+        pickFirst 'META-INF/*'
+    }
     signingConfigs {
         release {
             storeFile file('E:/Android Demo/MyApplication/keystore/appKeystore.jks')
@@ -14,6 +17,7 @@ android {
     compileSdkVersion appVersion.compileSdkVersion
     buildToolsVersion appVersion.buildToolsVersion
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.myapplication"
         minSdkVersion appVersion.minSdkVersion
         targetSdkVersion appVersion.targetSdkVersion
@@ -37,6 +41,11 @@ android {
             outputFileName = "Application_v${defaultConfig.versionName}_${buildType}_${buildTime()}.apk"
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -54,13 +63,18 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.3.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.core:core-ktx:+'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation thirdPartyDependencies.Gson
     implementation thirdPartyDependencies.Retrofit
     implementation thirdPartyDependencies.RetrofitConverterGson
     implementation thirdPartyDependencies.RetrofitRxJava
     implementation thirdPartyDependencies.Qmui
     implementation thirdPartyDependencies.Qmuiteam
+    implementation thirdPartyDependencies.rxJava
+    implementation thirdPartyDependencies.rxAndroid
 }
+
 
 def buildTime() {
     return new Date().format("yyyy-MM-dd-hh-mm")

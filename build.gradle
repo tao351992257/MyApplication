@@ -31,6 +31,9 @@ task clean(type: Delete) {
 ext {
 
     retrofitVersion = "2.6.0"
+    rxJavaVersion = '2.0.2'
+    rxAndroidVersion = '2.0.1'
+    retrofitRxJavaVersion = "1.0.0"
     appVersion = [
             minSdkVersion    : 19,
             targetSdkVersion : 29,
@@ -53,6 +56,8 @@ ext {
             Qmuiteam             : "com.qmuiteam:arch:2.0.0-alpha02",
             Retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             RetrofitConverterGson: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
-            RetrofitRxJava       : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+            RetrofitRxJava       : "com.squareup.retrofit2:adapter-rxjava2:2.4.0",
+            rxJava               : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxAndroid            : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
     ]
 }

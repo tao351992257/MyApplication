@@ -2,13 +2,14 @@ package com.example.base
 
 import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDexApplication
 import com.qmuiteam.qmui.arch.QMUISwipeBackActivityManager
 
 /**
  *  Author : JinTao Li
  *  Create Time : 2020/1/5
  */
-class BaseApplication : Application() {
+class BaseApplication : MultiDexApplication() {
     companion object {
         private lateinit var applicationContext: Context
         fun getApplicationContext(): Context {
