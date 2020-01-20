@@ -1,24 +1,37 @@
 package com.example.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import com.tbruyelle.rxpermissions2.RxPermissions
+import com.example.myapplication.R
+import com.example.utils.JumpPermissionSetting
+import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
 
-class LaunchActivity : AppCompatActivity() {
+class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+    companion object {
+        const val LOCATION = 0x001
+    }
 
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launch)
-        init()
+        initRequestPermissions()
+    }
+
+    private fun initRequestPermissions() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            init()
+        } else {
+            EasyPermissions.requestPermissions(this, "需要定位权限", LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
     }
 
     private fun init() {
@@ -30,6 +43,27 @@ class LaunchActivity : AppCompatActivity() {
             }
         }
         timer?.schedule(timerTask, 3000)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        when (requestCode) {
+            LOCATION -> {
+                JumpPermissionSetting.jump(this, LOCATION)
+            }
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        when (requestCode) {
+            LOCATION -> {
+                initRequestPermissions()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults,this)
     }
 
     override fun onStop() {

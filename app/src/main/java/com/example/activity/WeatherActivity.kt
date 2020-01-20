@@ -1,14 +1,17 @@
 package com.example.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.contract.WeatherContract
 import com.example.exception.AppError
 import com.example.globle.AppConst
+import com.example.myapplication.R
 import com.example.presenter.WeatherPresenter
 import com.example.reponse.WeatherResponse
 import com.example.utils.KeyboardUtil
@@ -23,6 +26,7 @@ import java.net.URL
 class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationListener {
     private var weatherPresenter: WeatherPresenter? = null
     private var mLocationClient: AMapLocationClient? = null
+    private var mLocationOption: AMapLocationClientOption? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,40 +35,25 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
         weatherPresenter = WeatherPresenter()
         weatherPresenter?.onCreate(this)
         initLocation()
-        init()
     }
 
     private fun initLocation() {
+        mLocationOption = AMapLocationClientOption()
+        mLocationOption?.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        mLocationOption?.interval = 2000
         mLocationClient = AMapLocationClient(applicationContext)
+        mLocationClient?.setLocationOption(mLocationOption)
         mLocationClient?.setLocationListener(this)
     }
 
-    private fun init() {
-        btnRequest.setOnClickListener {
-            weatherPresenter?.getWeather(etAdcode.text.trim().toString(), this)
-        }
-    }
-
-    @Synchronized
-    private fun loadData(adCode: String) {
-        val url = URL(AppConst.ServerUrl(adCode))
-        var httpURLConnection = url.openConnection() as HttpURLConnection
-        if (httpURLConnection.responseCode == AppConst.NET_STATUS_OK) {
-            httpURLConnection.connectTimeout = 1000
-            val bufferedReader = BufferedReader(InputStreamReader(httpURLConnection.inputStream, "UTF-8"))
-            var readLine: String?
-            while (bufferedReader.readLine().also { readLine = it } != null) {
-                readLine?.let {
-                    runOnUiThread { tvGson.text = stringToJson(it) }
-                }
-            }
-        }
+    override fun onStart() {
+        super.onStart()
+        mLocationClient?.startLocation()
     }
 
     override fun showWeather(response: WeatherResponse) {
-        KeyboardUtil.hideKeyboard(etAdcode)
         val toJson = Gson().toJson(response)
-        tvGson.text = stringToJson(toJson)
+        tvWeather.text = stringToJson(toJson)
     }
 
     override fun showError(appError: AppError) {
@@ -74,9 +63,20 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
     override fun onDestroy() {
         super.onDestroy()
         weatherPresenter?.onDestory()
+        mLocationClient?.stopLocation()
     }
 
     override fun onLocationChanged(location: AMapLocation?) {
-
+        if (location != null) {
+            if (location.errorCode == 0) {
+                weatherPresenter?.getWeather(location.adCode, this)
+            } else {
+                Log.e("Error", "location Error, ErrCode:"
+                        + location.errorCode + ", errInfo:"
+                        + location.errorInfo)
+            }
+        } else {
+            Log.d("Log", "onLocationChanged(WeatherActivity.kt:78)------>Location is null")
+        }
     }
 }
