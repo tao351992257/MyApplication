@@ -20,6 +20,7 @@ class BaseApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         BaseApplication.applicationContext = applicationContext
+        //QMUI初始化
         QMUISwipeBackActivityManager.init(this)
     }
 }
