@@ -7,7 +7,7 @@ android {
     }
     signingConfigs {
         MyApplication {
-            storeFile file('E:/Android Demo/MyApplication/keystore/appKeystore.jks')
+            storeFile file('/Users/jetbrains/AndroidDemo/MyApplication/keystore/appKeystore.jks')
             storePassword 'lijintao'
             keyAlias = 'MyApplication'
             keyPassword 'lijintao'
