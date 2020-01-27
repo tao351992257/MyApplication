@@ -7,19 +7,30 @@
     android:orientation="vertical"
     tools:context="com.example.ui.activity.WeatherActivity">
 
+    <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:id="@+id/qmuiEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardCornerRadius="5dp">
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -38,9 +49,9 @@
                     <ImageView
                         android:id="@+id/ivLocation"
                         android:layout_width="50dp"
-                        android:padding="5dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
+                        android:padding="5dp"
                         android:src="@drawable/location_icon" />
 
                     <TextView
@@ -49,9 +60,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:textSize="25dp"
-                        android:singleLine="true"
                         android:maxEms="15"
+                        android:singleLine="true"
+                        android:textSize="25dp"
                         android:textStyle="bold"
                         tools:text="北京市海淀区" />
                 </LinearLayout>

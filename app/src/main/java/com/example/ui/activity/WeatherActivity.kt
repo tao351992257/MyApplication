@@ -2,6 +2,7 @@ package com.example.ui.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
@@ -13,7 +14,6 @@ import com.example.exception.AppError
 import com.example.myapplication.R
 import com.example.presenter.WeatherPresenter
 import com.example.reponse.WeatherResponse
-import com.example.utils.Sha1Util
 import com.example.utils.TextUtils.Companion.stringToJson
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -23,7 +23,7 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
     private var mLocationClient: AMapLocationClient? = null
     private var mLocationOption: AMapLocationClientOption? = null
     private var oldAdcode: String? = null
-    private var isFrist: Boolean = true
+    private var isFirst: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +31,7 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
         setContentView(R.layout.activity_weather)
         weatherPresenter = WeatherPresenter()
         weatherPresenter?.onCreate(this)
-        val sHA1 = Sha1Util.sHA1(this)
-        Log.d("TAG", "Sha1:$sHA1")
+        qmuiEmptyView.setLoadingShowing(true)
         initLocation()
 
     }
@@ -51,12 +50,17 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
         mLocationClient?.startLocation()
     }
 
-    override fun showWeather(response: WeatherResponse) {
+    override fun showWeather(location: AMapLocation, response: WeatherResponse) {
+        qmuiEmptyView.setLoadingShowing(false)
+        cardView.visibility = View.VISIBLE
         val toJson = Gson().toJson(response)
+        tvLocation.text = "${location.city}${location.district}"
         tvWeather.text = stringToJson(toJson)
     }
 
     override fun showError(appError: AppError) {
+        qmuiEmptyView.setLoadingShowing(false)
+        cardView.visibility = View.VISIBLE
         Toast.makeText(this, appError.getMessage(), Toast.LENGTH_SHORT).show()
     }
 
@@ -69,16 +73,16 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
     override fun onLocationChanged(location: AMapLocation?) {
         if (location != null) {
             if (location.errorCode == 0) {
-                if (isFrist) {
-                    tvLocation.text = "${location.city}${location.district}"
-                    weatherPresenter?.getWeather(location.adCode, this)
+                if (isFirst) {
+                    weatherPresenter?.getWeather(location, this)
                     oldAdcode = location.adCode
-                    isFrist = false
+                    isFirst = false
                 } else {
                     if (!oldAdcode.equals(location.adCode)) {
-                        weatherPresenter?.getWeather(location.adCode, this)
+                        oldAdcode = location.adCode
+                        weatherPresenter?.getWeather(location, this)
                     } else {
-                        Log.d("TAG","newAdCode:${location.adCode}")
+                        Log.d("TAG", "newAdCode:${location.adCode}")
                     }
                 }
             } else {
@@ -90,4 +94,5 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
             Log.d("Log", "onLocationChanged(WeatherActivity.kt:78)------>Location is null")
         }
     }
+
 }

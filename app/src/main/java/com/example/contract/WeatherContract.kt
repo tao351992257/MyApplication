@@ -1,6 +1,7 @@
 package com.example.contract
 
 import android.content.Context
+import com.amap.api.location.AMapLocation
 import com.example.base.BasePresenter
 import com.example.base.BaseView
 import com.example.exception.AppError
@@ -26,12 +27,12 @@ interface WeatherContract {
 
         }
 
-        fun showWeather(response: WeatherResponse)
+        fun showWeather(location: AMapLocation, response: WeatherResponse)
 
         fun showError(appError: AppError)
     }
 
     interface Presenter : BasePresenter {
-        fun getWeather(adCode: String, context: Context)
+        fun getWeather(location: AMapLocation, context: Context)
     }
 }

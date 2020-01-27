@@ -30,7 +30,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <meta-data android:name="com.amap.api.v2.apikey" android:value="81830f0c2b114f108ec88b7c213fe01f"/>
-        <activity android:name="com.example.ui.activity.LaunchActivity">
+        <activity android:name="com.example.ui.activity.LaunchActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

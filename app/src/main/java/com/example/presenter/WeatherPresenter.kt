@@ -1,6 +1,7 @@
 package com.example.presenter
 
 import android.content.Context
+import com.amap.api.location.AMapLocation
 import com.example.base.BaseView
 import com.example.contract.WeatherContract
 import com.example.exception.AppError
@@ -29,9 +30,9 @@ class WeatherPresenter : WeatherContract.Presenter, RxJavaExecute() {
         weatherModel = WeatherModel()
     }
 
-    override fun getWeather(adCode: String, context: Context) {
+    override fun getWeather(location: AMapLocation, context: Context) {
 
-        val observable = weatherModel?.getWeather(adCode, context) ?: return
+        val observable = weatherModel?.getWeather(location.adCode, context) ?: return
         observable.concatMap { emit ->
             Observable.create<WeatherResponse> {
                 if (emit.status == NetConst.NET_ERROR) {
@@ -43,7 +44,7 @@ class WeatherPresenter : WeatherContract.Presenter, RxJavaExecute() {
         }
         val appObservable = object : AppObserver<WeatherResponse>(view) {
             override fun onSuccess(response: WeatherResponse) {
-                view?.showWeather(response)
+                view?.showWeather(location, response)
             }
 
             override fun onFail(appError: AppError) {
