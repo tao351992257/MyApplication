@@ -1,6 +1,7 @@
 package com.example.ui.activity
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -22,12 +23,13 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
     private var timerTask: TimerTask? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setWindow()
         setContentView(R.layout.activity_launch)
         initRequestPermissions()
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private fun setWindow() {
+        window.statusBarColor = applicationContext.getColor(android.R.color.transparent)
         val attributes = window.attributes
         attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -63,12 +65,23 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
     private fun init() {
         timer = Timer()
         timerTask = object : TimerTask() {
+
             override fun run() {
-                startActivity(Intent(this@LaunchActivity, WeatherActivity::class.java))
-                finish()
+                //Activity跳转动画需要在UI线程中才能生效
+                runOnUiThread {
+                    startActivity(Intent(this@LaunchActivity, WeatherActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    finish()
+                }
+
             }
         }
         timer?.schedule(timerTask, 3000)
+    }
+
+    override fun finish() {
+        super.finish()
+//        overridePendingTransition(0,0)
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {

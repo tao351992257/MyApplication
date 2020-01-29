@@ -11,9 +11,11 @@ import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.example.contract.WeatherContract
 import com.example.exception.AppError
+import com.example.globle.AppConst
 import com.example.myapplication.R
 import com.example.presenter.WeatherPresenter
 import com.example.reponse.WeatherResponse
+import com.example.utils.StatusBarUtil
 import com.example.utils.TextUtils.Companion.stringToJson
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -28,6 +30,7 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StatusBarUtil.setColor(this,StatusBarUtil.DEFAULT_STATUS_BAR_ALPHA)
         setContentView(R.layout.activity_weather)
         weatherPresenter = WeatherPresenter()
         weatherPresenter?.onCreate(this)
@@ -81,17 +84,15 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
                     if (!oldAdcode.equals(location.adCode)) {
                         oldAdcode = location.adCode
                         weatherPresenter?.getWeather(location, this)
-                    } else {
-                        Log.d("TAG", "newAdCode:${location.adCode}")
                     }
                 }
             } else {
-                Log.e("Error", "location Error, ErrCode:"
+                Log.e(AppConst.APP_TAG, "location Error, ErrCode:"
                         + location.errorCode + ", errInfo:"
                         + location.errorInfo)
             }
         } else {
-            Log.d("Log", "onLocationChanged(WeatherActivity.kt:78)------>Location is null")
+            Log.d(AppConst.APP_TAG, "onLocationChanged(WeatherActivity.kt:78)------>Location is null")
         }
     }
 

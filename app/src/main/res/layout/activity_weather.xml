@@ -8,6 +8,7 @@
     tools:context="com.example.ui.activity.WeatherActivity">
 
     <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:visibility="gone"
         android:id="@+id/qmuiEmptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,7 +53,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:padding="5dp"
-                        android:src="@drawable/location_icon" />
+                        android:src="@mipmap/location_icon" />
 
                     <TextView
                         android:id="@+id/tvLocation"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <!-- 将splash图片设置在这，这样这张图片取代白屏 -->
+        <item name="android:windowBackground">@drawable/launcher_bg</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <!--不让windowBackground延申到navigation bar区域-->
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <!--适配Android P刘海屏-->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/qmui_config_color_white" />
+    <item>
+        <bitmap
+            android:gravity="top"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/image1" />
+    </item>
+    <item android:bottom="50dp">
+        <bitmap
+            android:gravity="bottom"
+            android:src="@mipmap/nike" />
+    </item>
+
+</layer-list>

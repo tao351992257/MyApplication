@@ -1,8 +1,11 @@
 package com.example.net
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.example.globle.AppConst
+import com.example.utils.TextUtils
+import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -10,8 +13,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.StringBuilder
 import java.net.URLDecoder
 import java.nio.charset.Charset
+import java.nio.charset.UnsupportedCharsetException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -34,6 +39,7 @@ open class BaseRetrofit constructor(context: Context) {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
 //                .addInterceptor(HttpLoggingInterceptor())
+                .addInterceptor(MyLogInterceptor())
                 .addInterceptor(LogInterceptor())
                 .build()
 
@@ -66,6 +72,50 @@ open class BaseRetrofit constructor(context: Context) {
                     getResponseString(response),
                     (t2 - t1) / 1e6,
                     response.headers()))
+            return response
+        }
+
+    }
+
+    private inner class MyLogInterceptor : Interceptor {
+        @SuppressLint("LongLogTag")
+        override fun intercept(chain: Interceptor.Chain?): Response? {
+            val request = chain?.request()
+            val response = chain?.proceed(request)
+            val body = request?.body()
+            val stringBuilder = StringBuilder()
+            if (request?.method() == "POST" && body is FormBody) {
+                for (i in 0 until body.size()) {
+                    stringBuilder.append("${body.encodedName(i)} = ${body.encodedValue(i)} ", "")
+                }
+                stringBuilder.delete(stringBuilder.length - 1, stringBuilder.length)
+                //打印post请求的信息
+                Log.d(AppConst.APP_TAG, "发起请求[Request]\ncode:${response?.body()}\nmethod:${request.method()}" +
+                        "url:${request.url()}\nheaders:${request.headers().toMultimap()}\n" +
+                        "post请求:{$stringBuilder}")
+            } else {
+                Log.d(AppConst.APP_TAG, "发起请求[Request]\ncode:${response?.code()}\nmethod:${request?.method()}\n" +
+                        "url:${request?.url()}\nheaders:${request?.headers()?.toMultimap()}\n")
+            }
+
+            val responseBody = response?.body()
+            val contentLength = responseBody?.contentLength()
+            val source = responseBody?.source()
+            source?.request(Long.MAX_VALUE)
+            val buffer = source?.buffer()
+            val contentType = responseBody?.contentType()
+            if (contentType != null) {
+                try {
+                    contentType.charset(Charset.forName("UTF-8"))
+                } catch (e: UnsupportedCharsetException) {
+                    return response
+                }
+            }
+            if (contentLength != 0L) {
+                //打印返回json日志
+                val string = buffer?.clone()?.readString(Charset.forName("UTF-8"))
+                Log.d(AppConst.APP_TAG, "接收响应[Response]\n${string?.let { TextUtils.stringToJson(it) }}")
+            }
             return response
         }
 
