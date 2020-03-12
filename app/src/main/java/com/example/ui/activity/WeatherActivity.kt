@@ -1,7 +1,9 @@
 package com.example.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +17,13 @@ import com.example.globle.AppConst
 import com.example.myapplication.R
 import com.example.presenter.WeatherPresenter
 import com.example.reponse.WeatherResponse
+import com.example.utils.QMUIDialog
 import com.example.utils.StatusBarUtil
 import com.example.utils.TextUtils.Companion.stringToJson
 import com.google.gson.Gson
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
+import com.qmuiteam.qmui.widget.QMUIEmptyView
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import kotlinx.android.synthetic.main.activity_weather.*
 
 class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationListener {
@@ -30,11 +36,11 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StatusBarUtil.setColor(this,StatusBarUtil.DEFAULT_STATUS_BAR_ALPHA)
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
         setContentView(R.layout.activity_weather)
+        QMUIStatusBarHelper.translucent(this,resources.getColor(R.color.colorPrimary))
         weatherPresenter = WeatherPresenter()
         weatherPresenter?.onCreate(this)
-        qmuiEmptyView.setLoadingShowing(true)
         initLocation()
 
     }
@@ -54,17 +60,11 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
     }
 
     override fun showWeather(location: AMapLocation, response: WeatherResponse) {
-        qmuiEmptyView.setLoadingShowing(false)
-        cardView.visibility = View.VISIBLE
-        val toJson = Gson().toJson(response)
-        tvLocation.text = "${location.city}${location.district}"
-        tvWeather.text = stringToJson(toJson)
+
     }
 
     override fun showError(appError: AppError) {
-        qmuiEmptyView.setLoadingShowing(false)
-        cardView.visibility = View.VISIBLE
-        Toast.makeText(this, appError.getMessage(), Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onDestroy() {
@@ -94,6 +94,17 @@ class WeatherActivity : AppCompatActivity(), WeatherContract.View, AMapLocationL
         } else {
             Log.d(AppConst.APP_TAG, "onLocationChanged(WeatherActivity.kt:78)------>Location is null")
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val home = Intent(Intent.ACTION_MAIN)
+            home.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            home.addCategory(Intent.CATEGORY_HOME)
+            startActivity(home)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
 }

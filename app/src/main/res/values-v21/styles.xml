@@ -12,4 +12,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
+    <style name="GirlActivityTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <!--不让windowBackground延申到navigation bar区域-->
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <!--适配Android P刘海屏-->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
 </resources>

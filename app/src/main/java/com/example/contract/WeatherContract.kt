@@ -7,6 +7,7 @@ import com.example.base.BaseView
 import com.example.exception.AppError
 import com.example.reponse.BaseResponse
 import com.example.reponse.WeatherResponse
+import com.example.utils.QMUIDialog
 import io.reactivex.Observable
 
 /**
@@ -19,12 +20,13 @@ interface WeatherContract {
     }
 
     interface View : BaseView {
-        override fun showLoading() {
-
+        override fun showLoading(context: Context) {
+            QMUIDialog.showQMUITipDialogLoding(context)
+            QMUIDialog.show()
         }
 
         override fun hideLoading() {
-
+            QMUIDialog.QMUITipDialogDismiss()
         }
 
         fun showWeather(location: AMapLocation, response: WeatherResponse)

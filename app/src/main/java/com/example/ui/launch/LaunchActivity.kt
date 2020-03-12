@@ -1,4 +1,4 @@
-package com.example.ui.activity
+package com.example.ui.launch
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -7,8 +7,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
+import com.example.ui.activity.GirlsActivity
+import com.example.ui.activity.WeatherActivity
 import com.example.utils.JumpPermissionSetting
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
@@ -27,6 +30,7 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
         initRequestPermissions()
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @TargetApi(Build.VERSION_CODES.M)
     private fun setWindow() {
         window.statusBarColor = applicationContext.getColor(android.R.color.transparent)
@@ -69,7 +73,7 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
             override fun run() {
                 //Activity跳转动画需要在UI线程中才能生效
                 runOnUiThread {
-                    startActivity(Intent(this@LaunchActivity, WeatherActivity::class.java))
+                    startActivity(Intent(this@LaunchActivity, GirlsActivity::class.java))
                     overridePendingTransition(0, 0)
                     finish()
                 }
@@ -77,11 +81,6 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
             }
         }
         timer?.schedule(timerTask, 3000)
-    }
-
-    override fun finish() {
-        super.finish()
-//        overridePendingTransition(0,0)
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {

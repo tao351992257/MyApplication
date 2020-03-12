@@ -13,6 +13,7 @@ import com.example.observer.AppObserver
 import com.example.observer.RxJavaExecute
 import com.example.reponse.BaseResponse
 import com.example.reponse.WeatherResponse
+import com.example.utils.QMUIDialog
 import io.reactivex.Observable
 import java.lang.NullPointerException
 
@@ -31,7 +32,7 @@ class WeatherPresenter : WeatherContract.Presenter, RxJavaExecute() {
     }
 
     override fun getWeather(location: AMapLocation, context: Context) {
-
+        view?.showLoading(context)
         val observable = weatherModel?.getWeather(location.adCode, context) ?: return
         observable.concatMap { emit ->
             Observable.create<WeatherResponse> {
@@ -44,10 +45,12 @@ class WeatherPresenter : WeatherContract.Presenter, RxJavaExecute() {
         }
         val appObservable = object : AppObserver<WeatherResponse>(view) {
             override fun onSuccess(response: WeatherResponse) {
+                view?.hideLoading()
                 view?.showWeather(location, response)
             }
 
             override fun onFail(appError: AppError) {
+                view?.hideLoading()
                 view?.showError(appError)
             }
 
