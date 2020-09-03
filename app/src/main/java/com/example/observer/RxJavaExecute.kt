@@ -1,5 +1,6 @@
 package com.example.observer
 
+import android.annotation.SuppressLint
 import androidx.core.util.Preconditions
 import com.example.exception.AppError
 import io.reactivex.Observable
@@ -16,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 abstract class RxJavaExecute {
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
 
+    @SuppressLint("RestrictedApi")
     fun <T> execute(observer: DisposableObserver<T>, observableT: Observable<T>) {
         Preconditions.checkNotNull(observer)
         val observable = observableT.subscribeOn(Schedulers.io())

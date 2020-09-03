@@ -73,7 +73,7 @@ class LaunchActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks 
             override fun run() {
                 //Activity跳转动画需要在UI线程中才能生效
                 runOnUiThread {
-                    startActivity(Intent(this@LaunchActivity, GirlsActivity::class.java))
+                    startActivity(Intent(this@LaunchActivity, WeatherActivity::class.java))
                     overridePendingTransition(0, 0)
                     finish()
                 }
